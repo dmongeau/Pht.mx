@@ -13,9 +13,11 @@ var ImageCatcher = function(el) {
 		self._el = self._el == 'body' ? document.body:self._el;
 		
 		self._createDropbox.call(self,function(files) {
+			var self = this;
 			var count = files.length;
 			for(var i = 0; i < count; i++) {
 				var file = files[i];
+				console.log(file);
 				var reader = new FileReader();
 				reader.onload = function (event) {
 					self._addImage.call(self,event.target.result);
@@ -99,21 +101,19 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 		drop.className = '';
 		
 	}, false);
-	drop.addEventListener("drop", function(event){
+	drop.addEventListener("drop", function(e){
 			
-		event.stopPropagation();
-		event.preventDefault();
+		e.stopPropagation();
+		e.preventDefault();
 		
-		var dt = event.dataTransfer,
-			files = dt.files;
+		var dt = e.dataTransfer, files = dt.files;
 		
-		self._hideDropbox();
-		
-		callback(files);
-		
+		self._hideDropbox.call(self);
 		self._el.removeChild(drop);
 		
-		self._createDropbox();
+		callback.call(self,files);
+		
+		self._createDropbox.call(self,callback);
 		
 	}, false);
 	this._el.appendChild(drop);
