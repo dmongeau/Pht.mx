@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Pht.mx</title>
+
+<style type="text/css">
+	
+	html, body {
+		margin:0;
+		padding:0;	
+		width:100%;
+		height:100%;
+	}
+	
+	body {
+		background:#fff;
+		font-family:Verdana, Geneva, sans-serif;
+	}
+	
+	#drop {	
+		width:100%;
+		height:100%;
+		position:fixed;
+		z-index:1000;
+		opacity:0.4;
+		-moz-opacity:0.4;
+		background:transparent;
+		top:0px;
+		left:0px;
+		/*border:dashed 4px #666;*/
+	}
+	
+	#drop.hover {
+		width:95%;
+		height:95%;
+		background:#FFC;
+		border:dashed 4px #FC6;
+		top:2%;
+		left:2%;
+	}
+	
+	#clipboardData {
+		position:absolute;
+		left:-1000px;
+	}
+
+</style>
+
+<script type="text/javascript" src="catcher.js"></script>
+
+<script type="text/javascript">
+
+	new ImageCatcher();
+
+	
+</script>
+
+</head>
+
+<body>
+</body>
+</html>
