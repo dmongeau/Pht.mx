@@ -1,6 +1,13 @@
-// JavaScript Document
-
-
+/*
+ *
+ * ImageCatcher
+ *
+ * Catch image from clipboard and/or drag and drop over the window
+ *
+ * @author David Mongeau-Petitpas
+ * @version 0.1
+ *
+ */
 var ImageCatcher = function(el) {
 	
 	var self = this;
@@ -8,7 +15,7 @@ var ImageCatcher = function(el) {
 	this._el = (el || 'body');
 	this._isBody = this._el == 'body' || this._el == document.body ? true:false;
 	
-	this._attachEvent(window,'load',function() {
+	ImageCatcher.attachEvent(window,'load',function() {
 		
 		self._el = self._el == 'body' ? document.body:self._el;
 		
@@ -29,11 +36,11 @@ var ImageCatcher = function(el) {
 			}
 		});
 		
-		self._attachEvent.call(self,self._el,'mouseout',self._showDrop);
-		self._attachEvent.call(self,self._el,'mouseover',self._hideDrop);
+		ImageCatcher.attachEvent.call(self,self._el,'mouseout',self._showDrop);
+		ImageCatcher.attachEvent.call(self,self._el,'mouseover',self._hideDrop);
 		if(self._isBody) {
-			self._attachEvent.call(self,window,'blur',self._showDrop);
-			self._attachEvent.call(self,window,'focus',self._hideDrop);
+			ImageCatcher.attachEvent.call(self,window,'blur',self._showDrop);
+			ImageCatcher.attachEvent.call(self,window,'focus',self._hideDrop);
 		}
 		
 		self._catchPaste(function(url) {
@@ -51,12 +58,23 @@ var ImageCatcher = function(el) {
 	
 };
 
+/*
+ *
+ * Properties
+ *
+ */
 ImageCatcher.prototype._el = null;
 ImageCatcher.prototype._isBody = null;
 ImageCatcher.prototype._drop = null;
 ImageCatcher.prototype._cmdKeycode = null;
 
-ImageCatcher.prototype._attachEvent = function(el,ev,callback) {
+
+/*
+ *
+ * Cross-browser function to attach event
+ *
+ */
+ImageCatcher.attachEvent = function(el,ev,callback) {
 	
 	callback = typeof(callback) == 'function' ? callback:function(){};
 	
@@ -79,6 +97,12 @@ ImageCatcher.prototype._attachEvent = function(el,ev,callback) {
 	
 };
 
+
+/*
+ *
+ * Method to create the drop box where image files should be dropped
+ *
+ */
 ImageCatcher.prototype._createDropbox = function(callback) {
 	
 	callback = typeof(callback) == 'function' ? callback:function(){};
@@ -94,14 +118,14 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 	input.style.visibility = 'hidden';
 	drop.appendChild(input);
 	
-	this._attachEvent(drop,"dragenter", function(e){
+	ImageCatcher.attachEvent(drop,"dragenter", function(e){
 		
 		e.returnValue = false;
 		e.stopPropagation();
 		e.preventDefault();
 		
 	}, false);
-	this._attachEvent(drop,"dragover", function(e){
+	ImageCatcher.attachEvent(drop,"dragover", function(e){
 		
 		e.returnValue = false;
 		e.stopPropagation();
@@ -115,7 +139,7 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 		
 	}, false);
 	
-	this._attachEvent(drop,"dragleave", function(e) {
+	ImageCatcher.attachEvent(drop,"dragleave", function(e) {
 		
 		e.returnValue = false;
 		e.stopPropagation();
@@ -124,7 +148,7 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 		
 	}, false);
 	
-	this._attachEvent(drop,"drop", function(e){
+	ImageCatcher.attachEvent(drop,"drop", function(e){
 		
 		e.stopPropagation();
 		e.preventDefault();
@@ -141,17 +165,17 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 	
 	
 	
-	this._attachEvent(document,'mousemove',function(e) {
+	ImageCatcher.attachEvent(document,'mousemove',function(e) {
 		input.style.top = e.pageY+'px';
 		input.style.left = e.pageX+'px';
 	});
 	
-	this._attachEvent(input,['dragenter','dragover','dragleave'],function(e){
+	ImageCatcher.attachEvent(input,['dragenter','dragover','dragleave'],function(e){
 		e.stopPropagation();
 		e.preventDefault();
 	});
 	
-	this._attachEvent(input,'drop',function(e){
+	ImageCatcher.attachEvent(input,'drop',function(e){
 		
 		if(!e) { e = window.event; }
 		
@@ -178,23 +202,12 @@ ImageCatcher.prototype._hideDropbox = function() {
 	}
 };
 
-ImageCatcher.prototype._createImage = function(url) {
-	var img = new Image();
-	img.src = url;
-	img.onload = function() {
-		if(img.width > img.height && img.width > 200) {
-			img.width = 200;	
-		} else if(img.width < img.height && img.height > 200) {
-			img.height = 200;	
-		}
-	};
-	return img;
-};
 
-ImageCatcher.prototype._addImage = function(url) {
-	this._el.insertBefore(this._createImage(url),this._el.childNodes[0]);
-};
-
+/*
+ *
+ * Retrieve image url in your clipboard when you paste in the current window
+ *
+ */
 
 ImageCatcher.prototype._catchPaste = function(callback) {
 	
@@ -208,7 +221,7 @@ ImageCatcher.prototype._catchPaste = function(callback) {
 	else if(uA.indexOf('firefox') > -1) { this._cmdKeycode = 224; }
 	else if(uA.indexOf('opera') > -1) { this._cmdKeycode = 17; }
 	
-	this._attachEvent(document,'keydown',function(event) {
+	ImageCatcher.attachEvent(document,'keydown',function(event) {
 		
 		ctrl = (self._isCtrl.call(self,event) || ctrl) ? true:false;
 		
@@ -233,7 +246,7 @@ ImageCatcher.prototype._catchPaste = function(callback) {
 		
 	});
 
-	this._attachEvent(document,'keyup',function(event) {
+	ImageCatcher.attachEvent(document,'keyup',function(event) {
 		if(self._isCtrl.call(self,event)) {
 			ctrl = false;
 		}
@@ -247,4 +260,28 @@ ImageCatcher.prototype._isCtrl = function(e) {
 	if(this._cmdKeycode == 91 && e.kC == 93) { ctrl = true; }
 	
 	return ctrl;
+};
+
+
+/*
+ *
+ * Add preview image to the page
+ *
+ */
+
+ImageCatcher.prototype._createImage = function(url) {
+	var img = new Image();
+	img.src = url;
+	img.onload = function() {
+		if(img.width > img.height && img.width > 200) {
+			img.width = 200;	
+		} else if(img.width < img.height && img.height > 200) {
+			img.height = 200;	
+		}
+	};
+	return img;
+};
+
+ImageCatcher.prototype._addImage = function(url) {
+	this._el.insertBefore(this._createImage(url),this._el.childNodes[0]);
 };
