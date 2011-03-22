@@ -87,8 +87,8 @@ ImageCatcher.attachEvent = function(el,ev,callback) {
 		el[eventName] = function(e) {
 			
 			if(!e) e = window.event;
-			if (e.keyCode) e.kC = e.keyCode;
-			else if (e.which) e.kC = e.which;
+			if (e && e.keyCode) e.kC = e.keyCode;
+			else if (e && e.which) e.kC = e.which;
 			
 			_oldCallback();
 			callback(e);
@@ -166,8 +166,10 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 	
 	
 	ImageCatcher.attachEvent(document,'mousemove',function(e) {
-		input.style.top = e.pageY+'px';
-		input.style.left = e.pageX+'px';
+		if(e) {
+			input.style.top = e.pageY+'px';
+			input.style.left = e.pageX+'px';
+		}
 	});
 	
 	ImageCatcher.attachEvent(input,['dragenter','dragover','dragleave'],function(e){
