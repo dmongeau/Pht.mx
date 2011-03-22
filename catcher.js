@@ -83,39 +83,90 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 	var drop = document.createElement('div');
 	drop.id = 'drop';
 	
-	drop.addEventListener("dragenter", function(event){
-		event.stopPropagation();
-		event.preventDefault();
-	}, false);
-	drop.addEventListener("dragover", function(event){
-		event.stopPropagation();
-		event.preventDefault();
+	var input = document.createElement('input');
+	input.type = 'file';
+	input.style.position = 'absolute';
+	input.style.visibility = 'hidden';
+	drop.appendChild(input);
+	
+	this._attachEvent(drop,"dragenter", function(e){
 		
-		drop.className = 'hover';
-		
-	}, false);
-	drop.addEventListener("dragleave", function(event){
-		event.stopPropagation();
-		event.preventDefault();
-		
-		drop.className = '';
-		
-	}, false);
-	drop.addEventListener("drop", function(e){
-			
+		e.returnValue = false;
 		e.stopPropagation();
 		e.preventDefault();
 		
-		var dt = e.dataTransfer, files = dt.files;
+	}, false);
+	this._attachEvent(drop,"dragover", function(e){
+		
+		e.returnValue = false;
+		e.stopPropagation();
+		e.preventDefault();
+		
+		drop.className = 'hover';
+		
+		input.style.top = (e.pageY-25)+'px';
+		input.style.left = (e.pageX-50)+'px';
+		input.focus();
+		
+	}, false);
+	
+	this._attachEvent(drop,"dragleave", function(e) {
+		
+		e.returnValue = false;
+		e.stopPropagation();
+		e.preventDefault();
+		drop.className = '';
+		
+	}, false);
+	
+	this._attachEvent(drop,"drop", function(e){
+		
+		e.stopPropagation();
+		e.preventDefault();
+		
+		if(e.dataTransfer && FileReader) {
+			callback.call(self,e.dataTransfer.files);
+		}
 		
 		self._hideDropbox.call(self);
 		self._el.removeChild(drop);
-		
-		callback.call(self,files);
-		
 		self._createDropbox.call(self,callback);
 		
 	}, false);
+	
+	
+	
+	this._attachEvent(document,'mousemove',function(e) {
+		input.style.top = e.pageY+'px';
+		input.style.left = e.pageX+'px';
+	});
+	
+	this._attachEvent(input,'dragenter',function(e){
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	
+	this._attachEvent(input,'dragover',function(e){
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	
+	this._attachEvent(input,'dragleave',function(e){
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	
+	this._attachEvent(input,'drop',function(e){
+		
+		if(!e) { e = window.event; }
+		
+		e.stopPropagation();
+		e.preventDefault();
+		
+		alert('dropped');
+		
+	});
+	
 	this._el.appendChild(drop);
 	this._drop = drop;
 };
