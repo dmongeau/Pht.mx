@@ -60,17 +60,22 @@ ImageCatcher.prototype._attachEvent = function(el,ev,callback) {
 	
 	callback = typeof(callback) == 'function' ? callback:function(){};
 	
-	var _oldCallback = el['on'+ev] && typeof(el['on'+ev]) == 'function' ? el['on'+ev]:function(){};
+	ev = typeof(ev) == 'string' ? [ev]:ev;
 	
-	el['on'+ev] = function(e) {
+	for(var i = 0; i < ev.length; i++) {
+		eventName = 'on'+ev[i];
+		var _oldCallback = el[eventName] && typeof(el[eventName]) == 'function' ? el[eventName]:function(){};
 		
-		if(!e) e = window.event;
-		if (e.keyCode) e.kC = e.keyCode;
-		else if (e.which) e.kC = e.which;
-		
-		_oldCallback();
-		callback(e);
-	};
+		el[eventName] = function(e) {
+			
+			if(!e) e = window.event;
+			if (e.keyCode) e.kC = e.keyCode;
+			else if (e.which) e.kC = e.which;
+			
+			_oldCallback();
+			callback(e);
+		};
+	}
 	
 };
 
@@ -141,17 +146,7 @@ ImageCatcher.prototype._createDropbox = function(callback) {
 		input.style.left = e.pageX+'px';
 	});
 	
-	this._attachEvent(input,'dragenter',function(e){
-		e.stopPropagation();
-		e.preventDefault();
-	});
-	
-	this._attachEvent(input,'dragover',function(e){
-		e.stopPropagation();
-		e.preventDefault();
-	});
-	
-	this._attachEvent(input,'dragleave',function(e){
+	this._attachEvent(input,['dragenter','dragover','dragleave'],function(e){
 		e.stopPropagation();
 		e.preventDefault();
 	});
