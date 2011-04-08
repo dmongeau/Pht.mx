@@ -18,16 +18,38 @@ a {
 }
 
 #page {
-	margin:20px;	
+	margin:20px;
+	position:relative;
+	z-index:3;	
 }
 
 #header {
-	height:75px;
-	padding:20px;
+	height:115px;
+	overflow:hidden;
+	background:#000;
 	position:fixed;
 	top:0px;
 	left:0px;
-	width:100%;
+	z-index:2;
+	
+}
+
+#header .inner {
+	position:relative;
+	height:75px;
+	margin:20px;
+	overflow:hidden;
+	background:#000;
+	z-index:3;
+	
+}
+
+#header .fixed {
+	float:left;
+	width:395px;
+	height:75px;
+	position:relative;
+	z-index:2;
 	background:#000;
 }
 
@@ -63,12 +85,17 @@ a {
 	background:url(list.png) no-repeat -2px -2px;
 }
 
-#header .list {
+#header .lists {
 	float:left;
+	position:relative;
+	z-index:1;
 }
 
 #content {
-	margin-top:115px;	
+	margin-top:115px;
+	position:absolute;
+	z-index:1;
+	width:960px;
 }
 
 .photo {
@@ -87,6 +114,9 @@ a {
 .photo .left img {
 	width:50px;
 	height:50px;
+	display:block;
+	float:right;
+	margin:0;
 }
 
 .photo .right {

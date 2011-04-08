@@ -4,23 +4,72 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Pht.mx</title>
     <link href="styles.css" rel="stylesheet" type="text/css" />
-    
-    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+    <script type="text/javascript">
+		
+		$(function() {
+			
+			var $header = $('#header');
+			var width = ($header.find('.lists img').length*80)+$header.find('.fixed').outerWidth()+50;
+			document.title = width;
+			$('#page, #header').css('width',width+'px');
+			
+			
+			
+			var delayed = false;
+			$(window).scroll(function() {
+				/*if(!delayed) {
+					window.setTimeout(function() {
+						$('#content').animate({'left':window.pageXOffset+'px'},200);
+						delayed = false;
+					},200);
+					delayed = true;
+				}*/
+				//$('#content').css('left',window.pageXOffset+'px');
+				if(!$('#content-placeholder').length) {
+					var $placeholder = $('<div id="content-placeholder"></div>').css({
+						'width': $('#content').outerWidth(),
+						'height': $('#content').outerHeight()+100
+					});
+					$('#content').after($placeholder);
+					$('#content').css('position','fixed');
+				}
+				$('#content').css('top',-window.pageYOffset+'px');
+				$('#header .lists').css('left',-window.pageXOffset+'px');
+			});
+			
+		});
+	
+	</script>
 </head>
 <body>
 
 <div id="page">
 	<div id="header">
-    	<div class="me"></div>
-    	<div class="controls">
-        	<a href="#" class="button add">+</a>
-            <a href="#" class="button remove">-</a>
-            <a href="#" class="button list"></a>
-        </div>
-    	<div class="list">
-        	<img src="http://imados.fr/content/3/6/5/413657/jesus_s75.jpg" />
-            <img src="http://musique.leblogvideo.fr/files/ecouter-latin-girl-justin-bieber-75x75.jpg" />
-            <img src="https://d3qcduphvv2yxi.cloudfront.net/assets/2269777/thumbnail/Rock%20Girl%20logo.jpg?1286059009" />
+    	<div class="inner">
+            <div class="fixed">
+                <a href="/" class="me"></a>
+                <div class="controls">
+                    <a href="#" class="button add">+</a>
+                    <a href="#" class="button remove">-</a>
+                    <a href="#" class="button list"></a>
+                </div>
+            </div>
+            <div class="lists">
+                <img src="http://imados.fr/content/3/6/5/413657/jesus_s75.jpg" width="75" height="75" />
+                <img src="http://musique.leblogvideo.fr/files/ecouter-latin-girl-justin-bieber-75x75.jpg" width="75" height="75" />
+                <img src="https://d3qcduphvv2yxi.cloudfront.net/assets/2269777/thumbnail/Rock%20Girl%20logo.jpg?1286059009" width="75" height="75" />
+                <img src="http://www.blogcdn.com/www.joystiq.com/media/2010/09/jsea-sports-mma-ng-scrn-hayato-vs-jh001_thumbnail.jpg" width="75" height="75" />
+                <img src="http://blstb.msn.com/i/5D/75EAAE812A13674DD152B7DBA4834.jpg" width="75" height="75" />
+                <img src="http://www.alilinks.com/productimages/s3266/sports-shoes-brand-name-shoes-nike-ltd-max.jpg" width="75" height="75" />
+                <img src="http://www.spare-wheel.com/files/imagecache/small/media-front/2009/08/tesla-roadster-sport-1.jpg" width="75" height="75" />
+                <img src="http://www.bali-flowers.com/images/bunga%20bali/Pagoda-Flower.jpg" width="75" height="75" />
+                <img src="http://imados.fr/content/1/4/7/471476/kenzo-flower200_s75.jpg" width="75" height="75" />
+                <img src="http://www3.images.coolspotters.com/photos/408433/leighton-meester-and-bulgari-save-the-children-ceramic-and-silver-ring-medium.jpg" width="75" height="75" />
+                <img src="http://c1.ac-images.myspacecdn.com/images02/142/m_750577af426442529aa8f3747d2a5e38.gif" width="75" height="75" />
+                <img src="http://portal.unesco.org/ci/en/files/29421/12681333541news_children_lib_th.jpg/news_children_lib_th.jpg" width="75" height="75" />
+                <img src="http://www4.images.coolspotters.com/photos/228262/bahare-saddiqi-and-children-of-heaven-medium.jpg" width="75" height="75" />
+            </div>
         </div>
     </div>
 	<div id="content">
@@ -65,7 +114,7 @@
         </div>
         
     </div>
-
+	<div class="clear"></div>
 </div>
 
 </body>
