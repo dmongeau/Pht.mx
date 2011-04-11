@@ -5,42 +5,9 @@
     <title>Pht.mx</title>
     <link href="styles.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-    <script type="text/javascript">
-		
-		$(function() {
-			
-			var $header = $('#header');
-			var width = ($header.find('.lists img').length*80)+$header.find('.fixed').outerWidth()+50;
-			document.title = width;
-			$('#page, #header').css('width',width+'px');
-			
-			
-			
-			var delayed = false;
-			$(window).scroll(function() {
-				/*if(!delayed) {
-					window.setTimeout(function() {
-						$('#content').animate({'left':window.pageXOffset+'px'},200);
-						delayed = false;
-					},200);
-					delayed = true;
-				}*/
-				//$('#content').css('left',window.pageXOffset+'px');
-				if(!$('#content-placeholder').length) {
-					var $placeholder = $('<div id="content-placeholder"></div>').css({
-						'width': $('#content').outerWidth(),
-						'height': $('#content').outerHeight()+100
-					});
-					$('#content').after($placeholder);
-					$('#content').css('position','fixed');
-				}
-				$('#content').css('top',-window.pageYOffset+'px');
-				$('#header .lists').css('left',-window.pageXOffset+'px');
-			});
-			
-		});
-	
-	</script>
+    <script type="text/javascript" src="js/ImageCatcher.js"></script>
+    <script type="text/javascript" src="js/jquery.imagecatcher.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
 </head>
 <body>
 
@@ -70,6 +37,7 @@
                 <img src="http://portal.unesco.org/ci/en/files/29421/12681333541news_children_lib_th.jpg/news_children_lib_th.jpg" width="75" height="75" />
                 <img src="http://www4.images.coolspotters.com/photos/228262/bahare-saddiqi-and-children-of-heaven-medium.jpg" width="75" height="75" />
             </div>
+            <div class="block"></div>
         </div>
     </div>
 	<div id="content">
