@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Pht.mx</title>
+
+<style type="text/css">
+	
+	html, body {
+		margin:0;
+		padding:0;	
+		width:100%;
+		height:100%;
+	}
+	
+	body {
+		background:#fff;
+		font-family:Verdana, Geneva, sans-serif;
+	}
+	
+	#drop {	
+		width:100%;
+		height:100%;
+		position:fixed;
+		z-index:1000;
+		opacity:0.4;
+		-moz-opacity:0.4;
+		background:transparent;
+		top:0px;
+		left:0px;
+		/*border:dashed 4px #666;*/
+	}
+	
+	#drop.hover {
+		width:95%;
+		height:95%;
+		background:#FFC;
+		border:dashed 4px #FC6;
+		top:2%;
+		left:2%;
+	}
+	
+	#clipboardData {
+		position:absolute;
+		left:-1000px;
+	}
+
+</style>
+
+<script type="text/javascript">
+
+	function createImage(url) {
+		var img = new Image();
+		img.src = url;
+		img.onload = function() {
+			if(img.width > img.height && img.width > 200) {
+				img.width = 200;	
+			} else if(img.width < img.height && img.height > 200) {
+				img.height = 200;	
+			}
+		}
+		return img;
+	}
+	
+	function createDrop() {
+		var drop = document.createElement('div');
+		drop.id = 'drop';
+		drop.addEventListener("dragenter", function(event){
+			event.stopPropagation();
+			event.preventDefault();
+		}, false);
+		drop.addEventListener("dragover", function(event){
+			event.stopPropagation();
+			event.preventDefault();
+			
+			drop.className = 'hover';
+			
+		}, false);
+		drop.addEventListener("dragleave", function(event){
+			event.stopPropagation();
+			event.preventDefault();
+			
+			drop.className = '';
+			
+		}, false);
+		drop.addEventListener("drop", function(event){
+			var dt = event.dataTransfer,
+				files = dt.files,
+				count = files.length;
+				
+			event.stopPropagation();
+			event.preventDefault();
+			
+			hideDrop();
+			
+			for(var i = 0; i < count; i++) {
+				var file = files[i];
+				var reader = new FileReader();
+				reader.onload = function (event) {
+        			document.body.insertBefore(createImage(event.target.result),document.body.childNodes[0]);
+					window.setTimeout(function() {
+						document.body.scrollTop = 0;
+					},10);
+				};
+				reader.readAsDataURL(file);
+			}
+			
+			document.body.removeChild(drop);
+			
+			createDrop();
+			
+		}, false);
+		document.body.appendChild(drop);
+		
+	}
+	
+	
+	function showDrop() {
+		if(document.getElementById('drop')) {
+			document.getElementById('drop').style.display = 'block';
+		}
+	}
+	
+	function hideDrop() {
+		if(document.getElementById('drop')) {
+			document.getElementById('drop').style.display = 'none';
+		}
+	}
+	
+	document.onmouseout = window.onblur = showDrop;
+	
+	document.onmouseover = window.onfocus = hideDrop;
+	
+	window.onload = function() {
+		
+		createDrop();
+		
+		var ctrl = false;
+		var cmdKeyCode = null;
+		var ua = navigator.userAgent.toLowerCase();
+		if(ua.indexOf('chrome') > -1 || ua.indexOf('safari') > -1) { cmdKeyCode = 91; }
+		else if(ua.indexOf('firefox') > -1) { cmdKeyCode = 224; }
+		else if(ua.indexOf('opera') > -1) { cmdKeyCode = 17; }
+		
+		
+		document.onkeydown = function(event) {
+			ctrl = (event.ctrlKey || event.keyCode == cmdKeyCode || ctrl) ? true:false;
+			if(cmdKeyCode == 91 && event.keyCode == 93) { ctrl = true; }
+			
+			if (ctrl){
+				if (event.keyCode == 86) {
+					if(!document.getElementById('clipboardData')) {
+						var txta = document.createElement('textarea');
+						txta.id = 'clipboardData';
+						document.body.appendChild(txta);
+					} else {
+						var txta = document.getElementById('clipboardData');
+						txta.value = '';
+					}
+					txta.focus();
+					window.setTimeout(function() {
+						var url = txta.value;
+						if(url.search(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/) != -1) {
+							document.body.insertBefore(createImage(url),document.body.childNodes[0]);
+							window.setTimeout(function() {
+								document.body.scrollTop = 0;
+							},10);
+						}
+					},10);
+				}
+			}
+		};
+	
+		document.onkeyup = function(e) {
+			ctrl = ( ctrl) ? false:false;
+			if(e.ctrlKey || e.keyCode == cmdKeyCode || (cmdKeyCode == 91 && e.keyCode == 93)) {
+				ctrl = false;
+			}
+		};
+		
+	};
+
+	
+</script>
+
+</head>
+
+<body>
+</body>
+</html>
