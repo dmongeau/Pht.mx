@@ -54,34 +54,54 @@ $(function() {
 			updateContentSize();
 		}*/
 		var wdwHeight = $(window).height();
-		/*document.title = wdwHeight;*/
-		if(wdwHeight < 600) {
+		//document.title = wdwHeight;
+		/*if(wdwHeight < 565) {
 			
 			if($('#content').hasClass('small')) { return; };
-			$('#content').removeClass('large').removeClass('medium').addClass('small');
+			$('#content').removeClass('large').removeClass('medium').removeClass('x-large').addClass('small');
 			updateContentSize();
 			
-		} else if(wdwHeight >= 650 && wdwHeight < 750) {
+		} else if(wdwHeight >= 615 && wdwHeight < 665) {
 			
 			if($('#content').hasClass('medium')) { return; };
-			$('#content').removeClass('large').removeClass('small').addClass('medium');
+			$('#content').removeClass('large').removeClass('small').removeClass('x-large').addClass('medium');
 			updateContentSize();
 			
-		} else if(wdwHeight >= 750) {
+		} else if(wdwHeight >= 665 && wdwHeight < 765) {
 			
 			if($('#content').hasClass('large')) { return; };
-			$('#content').removeClass('medium').removeClass('small').addClass('large');
+			$('#content').removeClass('medium').removeClass('small').removeClass('x-large').addClass('large');
 			updateContentSize();
 			
-		} else if($('#content').hasClass('large') || $('#content').hasClass('medium') || $('#content').hasClass('small')) {
+		}  else if(wdwHeight >= 765) {
 			
-			$('#content').removeClass('small').removeClass('medium').removeClass('large');
+			if($('#content').hasClass('x-large')) { return; };
+			$('#content').removeClass('medium').removeClass('small').removeClass('large').addClass('x-large');
 			updateContentSize();
 			
-		} 
+		} else if($('#content').hasClass('x-large') || $('#content').hasClass('large') || $('#content').hasClass('medium') || $('#content').hasClass('small')) {
+			
+			$('#content').removeClass('small').removeClass('medium').removeClass('large').removeClass('x-large');
+			updateContentSize();
+			
+		} */
+		if(wdwHeight < 450) {
+			
+			/*if($('#content').hasClass('small')) { return; };
+			$('#content').removeClass('large').removeClass('medium').removeClass('x-large').addClass('small');*/
+			$('#content .photo img').css('maxHeight','300px');
+			updateContentSize();
+			
+			
+		} else {
+			
+			$('#content .photo img').css('maxHeight',(wdwHeight-150)+'px');
+			updateContentSize();
+			
+		}
 	});
 	$(window).trigger('resize');
-	
+	$(window).trigger('scroll');
 	/*
 	 *
 	 * Drag drop image
@@ -99,6 +119,8 @@ $(function() {
 			
 			if(typeof(files) == 'string') {
 				updateImage(files);
+			} else if(files instanceof jQuery) {
+				updateImage(files.attr('src'));
 			} else if(files && files[0]) {
 				jQuery.ImageCatcher.readFile(files[0],updateImage);
 			}
@@ -120,9 +142,11 @@ $(function() {
 				$('img').catcherDraggable();
 				updateHeaderSize();
 			}
-			
+			console.log(files);
 			if(typeof(files) == 'string') {
 				addList(files);
+			} else if(files instanceof jQuery) {
+				addList(files.attr('src'));
 			} else if(files && files[0]) {
 				jQuery.ImageCatcher.readFile(files[0],addList);
 			}
@@ -140,22 +164,25 @@ $(function() {
 			$(this).removeClass('hover');
 			
 			function addPhoto(url) {
-				var user = ($('#header .me img').length) ? $('#header .me img').attr('src'):'user.png';
+				var user = ($('#header .me img').length) ? $('#header .me img').attr('src'):'/statics/img/user.png';
 				var $photo = $('<div class="photo" style="display:none;">'+
 								'<div class="left"><img src="'+user+'" /></div>'+
 								'<div class="right"><img src="'+url+'" /></div>'+
 								'<div class="clear"></div></div>');
 				$('#content').prepend($photo);
 				$('img').catcherDraggable();
-				updateContentSize();
-				$photo.slideDown();
+				$photo.slideDown('fast',function() {
+					updateContentSize();
+				});
 			}
 			
 			if(typeof(files) == 'string') {
 				addPhoto(files);
+			} else if(files instanceof jQuery) {
+				addPhoto(files.attr('src'));
 			} else if(files) {
 				for(var i = 0; i < files.length; i++) {
-					ImageCatcher.readFile(files[i],addPhoto);
+					jQuery.ImageCatcher.readFile(files[i],addPhoto);
 				}
 			}
 		},
@@ -171,6 +198,20 @@ $(function() {
 		'onDrop' : function(files) {
 			$(this).removeClass('hover');
 			
+			if(files instanceof jQuery) {
+				var $el = files;
+				if($el.parents('.photo').length) {
+					$el.parents('.photo').slideUp('fast',function() {
+						$(this).remove();
+						updateContentSize();
+					});
+				} else if($el.parents('.lists').length) {
+					$el.animate({'width':'1px'},'fast',function() {
+						$(this).remove();
+						updateHeaderSize();
+					});
+				}
+			} 
 		},
 		'onDragOver' : function() {
 			$(this).addClass('hover');

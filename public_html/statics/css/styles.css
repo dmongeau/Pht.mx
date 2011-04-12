@@ -71,7 +71,7 @@ a {
 	float:left;
 	margin-right:20px;
 	margin-left:25px;
-	background:url(user.png) no-repeat;
+	background:url(../img/user.png) no-repeat;
 }
 
 #header .me-set {
@@ -107,7 +107,7 @@ a {
 }
 
 #header .controls .list {
-	background:url(list.png) no-repeat -2px -2px;
+	background:url(../img/list.png) no-repeat -2px -2px;
 }
 
 #header .hover {
@@ -198,6 +198,11 @@ a {
 .large .photo .right,  .large .photo .right img {
 	/*width:1200px;*/
 	max-height:550px;	
+}
+
+.x-large .photo .right,  .x-large .photo .right img {
+	/*width:1200px;*/
+	max-height:650px;	
 }
 
 

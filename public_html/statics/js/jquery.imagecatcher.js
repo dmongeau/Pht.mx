@@ -51,7 +51,7 @@ jQuery.ImageCatcher.DropBox = function(el,opts) {
 	
 	var self = this;
 	
-	this.settings = ImageCatcher.extend({
+	this.settings = jQuery.extend({
 		'onDrop' : function() {},
 		'onDragEnter' : function() {},
 		'onDragOver' : function() {},
@@ -184,11 +184,10 @@ jQuery.ImageCatcher.DropBox.prototype._createDropBox = function(callback) {
 	
 	$drop.bind("mouseover", function(e){
 		
-		self.settings.onDragOver.call($drop,e,self);
-		
 		if(jQuery.ImageCatcher.Draggable.isDragging) {
+			self.settings.onDragOver.call($drop,e,self);
 			jQuery.ImageCatcher.Draggable._dropCallback = function(e,$target) {
-				callback.call($drop,$target.attr('src'),self);
+				callback.call($drop, $target, self);
 			}
 		}
 		
@@ -274,7 +273,7 @@ jQuery.ImageCatcher.Draggable = function(el,opts) {
 				'top' : (e.pageY+1)+'px',
 				'left' : (e.pageX+1)+'px',
 				'opacity' : 0.5
-			});
+			}).hide();
 			self.$placeholder.html($('<img src="'+jQuery.ImageCatcher.Draggable.$dragObject.attr('src')+'" width="75" height="75" />'));
 			
 			$('body').append(self.$placeholder);
@@ -289,7 +288,7 @@ jQuery.ImageCatcher.Draggable = function(el,opts) {
 			self.$placeholder.css({
 				'top' : (e.pageY+1)+'px',
 				'left' : (e.pageX+1)+'px'
-			});
+			}).show();
 		}
 		
 	}, false);
