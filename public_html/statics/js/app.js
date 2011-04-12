@@ -38,8 +38,8 @@ $(function() {
 			updateContentSize();
 			$('#content').css('position','fixed');
 		}
-		$('#content').css('top',-window.pageYOffset+'px');
-		$('#header .lists').css('left',-window.pageXOffset+'px');
+		$('#content').css('top',-$(window).scrollTop()+'px');
+		$('#header .lists').css('left',-$(window).scrollLeft()+'px');
 	});
 	$(window).trigger('scroll');
 	
