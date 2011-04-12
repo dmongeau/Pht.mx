@@ -65,6 +65,7 @@ a {
 }
 
 #header .me {
+	position:relative;
 	width:69px;
 	height:69px;
 	border:dashed 3px #fff;
@@ -111,7 +112,7 @@ a {
 }
 
 #header .hover {
-	border-color:#F60 !important;
+	border-color:#FFF !important;
 	background-color:#333 !important;
 }
 

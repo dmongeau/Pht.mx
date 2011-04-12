@@ -121,7 +121,7 @@ jQuery.ImageCatcher.DropBox.prototype._createDropBox = function(callback) {
 	$drop.bind('dragstart',function(e){
 		
 		e.returnValue = false;
-		e.stopPropagation();
+		//e.stopPropagation();
 		e.preventDefault();
 		
 		var dt = e.originalEvent.dataTransfer;
@@ -287,7 +287,6 @@ jQuery.ImageCatcher.Draggable = function(el,opts) {
 					'position' : 'absolute',
 					'width' : '75px',
 					'height' : '75px',
-					'background' : '#ffcc00',
 					'zIndex' : 4999,
 					'top' : (e.pageY+1)+'px',
 					'left' : (e.pageX+1)+'px',
@@ -296,6 +295,7 @@ jQuery.ImageCatcher.Draggable = function(el,opts) {
 				self.$placeholder.html($('<img src="'+jQuery.ImageCatcher.Draggable.$dragObject.attr('src')+'" width="75" height="75" />'));
 				
 				$('body').append(self.$placeholder);
+				$('body').css('cursor','move');
 			}
 			
 			if(self.$placeholder && jQuery.ImageCatcher.Draggable.isDragging) {
@@ -314,6 +314,7 @@ jQuery.ImageCatcher.Draggable = function(el,opts) {
 		//document.title = 'dragend';
 			
 		self.mouseDown = false;
+		$('body').css('cursor','');
 		
 		if(jQuery.ImageCatcher.Draggable.isDragging) {
 		
