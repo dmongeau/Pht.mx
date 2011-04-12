@@ -74,18 +74,18 @@ a {
 	background:url(../img/user.png) no-repeat;
 }
 
+#header img {
+	width:75px;
+	height:75px;
+	margin:0;
+	padding:0;
+}
+
 #header .me-set {
 	width:75px;
 	height:75px;
 	border:none;
 	background:none;
-}
-
-#header .me-set img {
-	width:75px;
-	height:75px;
-	margin:0;
-	padding:0;
 }
 
 #header .controls {
@@ -128,6 +128,12 @@ a {
 	width:75px;
 	height:75px;
 	margin-right:5px;
+}
+
+#header .lists img.current {
+	border:solid 3px #FFF;
+	width:69px;
+	height:69px;
 }
 
 #content {

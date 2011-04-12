@@ -117,10 +117,22 @@ jQuery.ImageCatcher.DropBox.prototype._createDropBox = function(callback) {
 	 * Handle drag & drop events
 	 *
 	 */
-	$drop.bind("dragenter", function(e){
+	
+	$drop.bind('dragstart',function(e){
 		
 		e.returnValue = false;
 		e.stopPropagation();
+		e.preventDefault();
+		
+		var dt = e.originalEvent.dataTransfer;
+		dt.effectAllowed = 'move';
+		dt.setData("Text", $(this).attr('src'));
+		
+	});
+	$drop.bind("dragenter", function(e){
+		
+		e.returnValue = false;
+		//e.stopPropagation();
 		e.preventDefault();
 		
 		self.settings.onDragEnter.call($drop,e,self);
@@ -129,7 +141,7 @@ jQuery.ImageCatcher.DropBox.prototype._createDropBox = function(callback) {
 	$drop.bind("dragover", function(e){
 		
 		e.returnValue = false;
-		e.stopPropagation();
+		//e.stopPropagation();
 		e.preventDefault();
 		
 		self.settings.onDragOver.call($drop,e,self);
@@ -139,7 +151,7 @@ jQuery.ImageCatcher.DropBox.prototype._createDropBox = function(callback) {
 	$drop.bind("dragleave", function(e) {
 		
 		e.returnValue = false;
-		e.stopPropagation();
+		//e.stopPropagation();
 		e.preventDefault();
 		
 		self.settings.onDragOut.call($drop,e,self);
@@ -148,7 +160,7 @@ jQuery.ImageCatcher.DropBox.prototype._createDropBox = function(callback) {
 	
 	$drop.bind("drop", function(e){
 		
-		e.stopPropagation();
+		//e.stopPropagation();
 		e.preventDefault();
 		
 		var ev = e.originalEvent;
@@ -258,44 +270,50 @@ jQuery.ImageCatcher.Draggable = function(el,opts) {
 	
 	this.$el.bind('mousedown',function(e){
 		
-		self.settings.onDragStart.call(self,e,this._el);
+		self.mouseDown = true;
 		
-		jQuery.ImageCatcher.Draggable.$dragObject = $(this);
-		jQuery.ImageCatcher.Draggable.isDragging = true;
+	});
+	
+	$(document).bind('mousemove',function(e){
 		
-		if(!$('#draggable-placeholder').length) {
-			self.$placeholder = $('<div id="draggable-placeholder"></div>').css({
-				'position' : 'absolute',
-				'width' : '75px',
-				'height' : '75px',
-				'background' : '#ffcc00',
-				'zIndex' : 4999,
-				'top' : (e.pageY+1)+'px',
-				'left' : (e.pageX+1)+'px',
-				'opacity' : 0.5
-			}).hide();
-			self.$placeholder.html($('<img src="'+jQuery.ImageCatcher.Draggable.$dragObject.attr('src')+'" width="75" height="75" />'));
+		if(self.mouseDown) {
+			self.settings.onDragStart.call(self,e,self.$el);
 			
-			$('body').append(self.$placeholder);
+			jQuery.ImageCatcher.Draggable.$dragObject = self.$el;
+			jQuery.ImageCatcher.Draggable.isDragging = true;
+			
+			if(!$('#draggable-placeholder').length) {
+				self.$placeholder = $('<div id="draggable-placeholder"></div>').css({
+					'position' : 'absolute',
+					'width' : '75px',
+					'height' : '75px',
+					'background' : '#ffcc00',
+					'zIndex' : 4999,
+					'top' : (e.pageY+1)+'px',
+					'left' : (e.pageX+1)+'px',
+					'opacity' : 0.5
+				}).hide();
+				self.$placeholder.html($('<img src="'+jQuery.ImageCatcher.Draggable.$dragObject.attr('src')+'" width="75" height="75" />'));
+				
+				$('body').append(self.$placeholder);
+			}
+			
+			if(self.$placeholder && jQuery.ImageCatcher.Draggable.isDragging) {
+				//document.title = 'mousemove : '+e.pageY+'x'+e.pageX;
+				self.$placeholder.css({
+					'top' : (e.pageY+1)+'px',
+					'left' : (e.pageX+1)+'px'
+				}).show();
+			}
 		}
 		
 	});
 	
-	$(document).mousemove(function(e){
-		
-		if(self.$placeholder && jQuery.ImageCatcher.Draggable.isDragging) {
-			//document.title = 'mousemove : '+e.pageY+'x'+e.pageX;
-			self.$placeholder.css({
-				'top' : (e.pageY+1)+'px',
-				'left' : (e.pageX+1)+'px'
-			}).show();
-		}
-		
-	}, false);
-	
 	$(document).bind('mouseup',function(e){
 		
 		//document.title = 'dragend';
+			
+		self.mouseDown = false;
 		
 		if(jQuery.ImageCatcher.Draggable.isDragging) {
 		
@@ -324,6 +342,7 @@ jQuery.ImageCatcher.Draggable.$dragObject = null;
 jQuery.ImageCatcher.Draggable._dropCallback = null;
 jQuery.ImageCatcher.Draggable.prototype.$el = null;
 jQuery.ImageCatcher.Draggable.prototype.$placeholder = null;
+jQuery.ImageCatcher.Draggable.prototype.mouseDown = false;
 
 /*---------------------------------------------------------------------------*/
 
