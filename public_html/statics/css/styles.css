@@ -14,7 +14,7 @@ a {
 	color:#ccc;
 }
 
-img { border:none !important; -ms-interpolation-mode: bicubic; }
+img { border:none; -ms-interpolation-mode: bicubic; }
 
 .clear {
 	clear:both;
@@ -134,7 +134,7 @@ img { border:none !important; -ms-interpolation-mode: bicubic; }
 }
 
 #header .lists img.current {
-	border:solid 3px #FFF;
+	border:solid 3px #FFF !important;
 	width:69px;
 	height:69px;
 }
