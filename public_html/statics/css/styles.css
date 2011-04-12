@@ -14,7 +14,7 @@ a {
 	color:#ccc;
 }
 
-img { -ms-interpolation-mode: bicubic; }
+img { border:none !important; -ms-interpolation-mode: bicubic; }
 
 .clear {
 	clear:both;
